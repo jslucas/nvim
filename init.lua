@@ -468,7 +468,12 @@ require('lazy').setup({
           cmd = { 'elixir-ls' },
           capabilities = capabilities,
         },
-        ruby_ls = {},
+
+        solargraph = {},
+        -- ruby_ls = {
+        --   cmd = { 'ruby-lsp' },
+        --   capabilities = capabilities,
+        -- },
 
         lua_ls = {
           -- cmd = {...},
