@@ -38,3 +38,7 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 vim.keymap.set('n', '<leader>wt', function()
   print(os.date '%I:%M:%S %p')
 end, { desc = 'Prints the time' })
+
+vim.keymap.set('n', '<leader>tn', ':term<CR>', { desc = '[N]ew terminal' })
+vim.keymap.set('n', '<leader>tv', ':vsplit | terminal<CR>', { desc = '[V]ertical split terminal' })
+vim.keymap.set('n', '<leader>th', ':split | terminal<CR>', { desc = '[H]orizontal split terminal' })
