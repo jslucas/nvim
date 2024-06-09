@@ -152,7 +152,7 @@ return { -- LSP Configuration & Plugins
         capabilities = capabilities,
       },
 
-      solargraph = {},
+      solargraph = { capabilities = capabilities },
       -- ruby_ls = {
       --   cmd = { 'ruby-lsp' },
       --   capabilities = capabilities,
