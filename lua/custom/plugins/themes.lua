@@ -14,8 +14,17 @@ return {
       -- vim.cmd.colorscheme 'tokyonight-night'
 
       -- You can configure highlights by doing something like:
+      -- vim.cmd.hi 'Comment gui=none'
+      -- vim.cmd.colorscheme 'tokyonight-night'
+    end,
+  },
+  {
+    'Mofiqul/vscode.nvim',
+    name = 'vscode',
+    priority = 1000,
+    config = function()
       vim.cmd.hi 'Comment gui=none'
-      vim.cmd.colorscheme 'tokyonight-night'
+      vim.cmd.colorscheme 'vscode'
     end,
   },
   {
