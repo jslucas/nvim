@@ -24,18 +24,15 @@ return { -- Autoformat
       }
     end,
     formatters_by_ft = {
-      ruby = { 'rubocop' },
+      ruby = { 'rubocop', stop_after_first = true },
       lua = { 'stylua' },
       -- Conform can also run multiple formatters sequentially
       -- python = { "isort", "black" },
-      --
-      -- You can use a sub-list to tell conform to run *until* a formatter
-      -- is found.
-      javascript = { { 'prettierd', 'prettier' } },
-      javascriptreact = { { 'prettierd', 'prettier' } },
-      markdown = { { 'prettierd', 'prettier' }, 'markdownlint' },
-      typescript = { { 'prettierd', 'prettier' } },
-      typescriptreact = { { 'prettierd', 'prettier' } },
+      javascript = { 'prettier', 'prettierd', stop_after_first = true },
+      javascriptreact = { 'prettier', 'prettierd', stop_after_first = true },
+      markdown = { 'markdownlint', 'prettier', 'prettierd', stop_after_first = true },
+      typescript = { 'prettier', 'prettierd', stop_after_first = true },
+      typescriptreact = { 'prettier', 'prettierd', stop_after_first = true },
     },
   },
 }
