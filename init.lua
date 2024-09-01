@@ -1,6 +1,7 @@
 require 'settings'
 require 'mappings'
 require 'autocommands'
+require 'custom.commands.cp'
 
 vim.o.title = true
 vim.o.titlestring = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
