@@ -19,7 +19,7 @@ return {
     end,
   },
   {
-    'Mofiqul/vscode.nvim',
+    'jslucas/vscode.nvim',
     name = 'vscode',
     priority = 1000,
     config = function()
