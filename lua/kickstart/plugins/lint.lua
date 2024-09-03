@@ -51,6 +51,11 @@ return {
           require('lint').try_lint()
         end,
       })
+      -- Trim trailing whitespace
+      vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
+        pattern = { '*' },
+        command = [[%s/\s\+$//e]],
+      })
     end,
   },
 }
