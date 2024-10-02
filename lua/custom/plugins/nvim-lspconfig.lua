@@ -139,11 +139,6 @@ return { -- LSP Configuration & Plugins
       --
       -- Some languages (like typescript) have entire language plugins that can be useful:
       --    https://github.com/pmizio/typescript-tools.nvim
-      --
-      -- But for many setups, the LSP (`tsserver`) will work just fine
-      tsserver = { capabilities = capabilities },
-      jsonls = { capabilities = capabilities },
-      --
       elixirls = {
         cmd = { 'elixir-ls' },
         capabilities = capabilities,
@@ -152,14 +147,7 @@ return { -- LSP Configuration & Plugins
       solargraph = {
         capabilities = capabilities,
       },
-      -- ruby_ls = {
-      --   cmd = { 'ruby-lsp' },
-      --   capabilities = capabilities,
-      -- },
-
       lua_ls = {
-        -- cmd = {...},
-        -- filetypes = { ...},
         capabilities = { capabilities = capabilities },
         settings = {
           Lua = {
@@ -197,10 +185,6 @@ return { -- LSP Configuration & Plugins
     require('mason-lspconfig').setup {
       handlers = {
         function(server_name)
-          -- https://github.com/neovim/nvim-lspconfig/pull/3232
-          if server_name == 'tsserver' then
-            server_name = 'ts_ls'
-          end
           local server = servers[server_name] or {}
           -- This handles overriding only values explicitly passed
           -- by the server configuration above. Useful when disabling
