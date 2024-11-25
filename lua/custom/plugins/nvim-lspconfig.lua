@@ -144,6 +144,10 @@ return { -- LSP Configuration & Plugins
         capabilities = capabilities,
       },
 
+      eslint = {
+        capabilities = capabilities,
+      },
+
       solargraph = {
         capabilities = capabilities,
       },
