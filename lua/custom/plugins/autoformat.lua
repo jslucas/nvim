@@ -26,7 +26,7 @@ return { -- Autoformat
     formatters_by_ft = {
       ruby = {
         'rubocop',
-        args = { '-A', '--only Layout', '-f', 'quiet', '--stderr', '--stdin', '$FILENAME' },
+        args = { '-A', '--only Layout', '--ignore-unrecognized-cops', '-f', 'quiet', '--stderr', '--stdin', '$FILENAME' },
         stop_after_first = true,
       },
       lua = { 'stylua' },
