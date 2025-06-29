@@ -1,8 +1,8 @@
-require 'settings'
-require 'mappings'
-require 'autocommands'
-require 'custom.commands.cp'
-require 'custom.commands.remote'
+require 'config.settings'
+require 'config.mappings'
+require 'config.autocommands.on_yank'
+require 'config.commands.cp'
+require 'config.commands.remote'
 
 vim.o.title = true
 vim.o.titlestring = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
@@ -30,8 +30,7 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
-  { import = 'kickstart.plugins' },
-  { import = 'custom.plugins' }, --  https://lazy.folke.io/usage/structuring
+  { import = 'config.plugins' },
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
