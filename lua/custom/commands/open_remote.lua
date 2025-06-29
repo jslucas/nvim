@@ -1,11 +1,12 @@
 -- Function to open the current file in the browser
-local function open_remote()
+local function open_remote(args)
   local is_git_repo = vim.fn.system('git rev-parse --is-inside-work-tree'):gsub('%s+', '') == 'true'
   if not is_git_repo then
     print 'Not a git repository'
     return
   end
 
+  -- https://github.com/user/repo
   local git_remote = vim.fn.system('git config --get remote.origin.url')
     :gsub('%s+', '')
     :gsub('git@github.com:', 'https://github.com/')
@@ -13,8 +14,21 @@ local function open_remote()
 
   local branch = vim.fn.system('git rev-parse --abbrev-ref HEAD'):gsub('%s+', '')
   local relative_file_path = vim.fn.expand '%:.'
+  local url_parts = {
+    git_remote,
+    "blob",
+    branch,
+    relative_file_path
+  }
 
-  local github_url = git_remote .. '/blob/' .. branch .. '/' .. relative_file_path .. '#L' .. vim.fn.line '.'
+  local line1 = args.line1 or vim.fn.line('.')
+  local line2 = args.line2 or line1
+  local line_fragment = "#L" .. tostring(line1)
+  if tonumber(line2) > tonumber(line1) then
+    line_fragment = line_fragment .. "-L" .. tostring(line2)
+  end
+
+  local github_url = table.concat(url_parts, "/") .. line_fragment
 
   local open_cmd = "open"
   if vim.fn.has("unix") == 1 and vim.fn.has("mac") == 0 then
@@ -24,4 +38,4 @@ local function open_remote()
   vim.fn.system(string.format("%s '%s'", open_cmd, github_url))
 end
 
-vim.api.nvim_create_user_command('OpenRemote', open_remote, {})
+vim.api.nvim_create_user_command('OpenRemote', open_remote, { range = true })
