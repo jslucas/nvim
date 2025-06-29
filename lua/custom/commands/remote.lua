@@ -1,9 +1,9 @@
--- Function to open the current file in the browser
-local function open_remote(args)
+-- Returns GitHub URL for the current file
+local function build_github_url(args)
   local is_git_repo = vim.fn.system('git rev-parse --is-inside-work-tree'):gsub('%s+', '') == 'true'
   if not is_git_repo then
     print 'Not a git repository'
-    return
+    return nil
   end
 
   -- https://github.com/user/repo
@@ -28,14 +28,27 @@ local function open_remote(args)
     line_fragment = line_fragment .. "-L" .. tostring(line2)
   end
 
-  local github_url = table.concat(url_parts, "/") .. line_fragment
+  return table.concat(url_parts, "/") .. line_fragment
+end
 
+-- Opens the current file in GitHub on the browser
+local function open_remote(args)
+  local github_url = build_github_url(args)
+  if not github_url then return end
   local open_cmd = "open"
   if vim.fn.has("unix") == 1 and vim.fn.has("mac") == 0 then
     open_cmd = "xdg-open"
   end
-
   vim.fn.system(string.format("%s '%s'", open_cmd, github_url))
 end
 
+-- Copies the current file's GitHub URL to the clipboard
+local function copy_remote(args)
+  local github_url = build_github_url(args)
+  if not github_url then return end
+  vim.fn.setreg('+', github_url)
+  print('Copied remote URL: ' .. github_url)
+end
+
 vim.api.nvim_create_user_command('OpenRemote', open_remote, { range = true })
+vim.api.nvim_create_user_command('CopyRemote', copy_remote, { range = true })
