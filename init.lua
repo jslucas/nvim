@@ -31,7 +31,7 @@ require('lazy').setup({
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
   { import = 'kickstart.plugins' },
-  { import = 'custom.plugins' }, --  `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
+  { import = 'custom.plugins' }, --  https://lazy.folke.io/usage/structuring
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
@@ -53,8 +53,5 @@ require('lazy').setup({
     },
   },
 })
-
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
 
 require('oil').setup()
