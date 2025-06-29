@@ -2,7 +2,7 @@ require 'settings'
 require 'mappings'
 require 'autocommands'
 require 'custom.commands.cp'
-require 'custom.commands.open_remote'
+require 'custom.commands.remote'
 
 vim.o.title = true
 vim.o.titlestring = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
