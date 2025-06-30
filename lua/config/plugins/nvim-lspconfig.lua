@@ -139,7 +139,19 @@ return { -- LSP Configuration & Plugins
         capabilities = capabilities,
       },
       solargraph = {
-        capabilities = capabilities,
+        -- https://medium.com/@cristianvg/neovim-lsp-your-rbenv-gemset-and-solargraph-8896cb3df453
+        cmd = { 'bundle', 'exec', 'solargraph', 'stdio' },
+        settings = {
+          solargraph = {
+            autoformat = true,
+            completion = true,
+            diagnostics = true,
+            folding = true,
+            references = true,
+            rename = true,
+            symbols = true,
+          },
+        },
       },
       lua_ls = {
         capabilities = { capabilities = capabilities },

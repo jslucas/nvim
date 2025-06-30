@@ -24,16 +24,8 @@ return { -- Autoformat
       }
     end,
     formatters_by_ft = {
-      ruby = {
-        'rubocop',
-        args = { '-A', '--only Layout', '--ignore-unrecognized-cops', '-f', 'quiet', '--stderr', '--stdin', '$FILENAME' },
-        stop_after_first = true,
-      },
+      ruby = {},
       lua = { 'stylua' },
-      -- Conform can also run multiple formatters sequentially
-      -- python = { "isort", "black" },
-      javascript = { 'prettier', 'prettierd', stop_after_first = true },
-      javascriptreact = { 'prettier', 'prettierd', stop_after_first = true },
       markdown = { 'markdownlint', 'prettier', 'prettierd', stop_after_first = true },
       typescript = { 'prettier', 'prettierd', stop_after_first = true },
       typescriptreact = { 'prettier', 'prettierd', stop_after_first = true },
