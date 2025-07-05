@@ -153,6 +153,7 @@ return { -- LSP Configuration & Plugins
           },
         },
       },
+      terraformls = {},
       lua_ls = {
         capabilities = { capabilities = capabilities },
         settings = {
