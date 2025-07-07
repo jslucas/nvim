@@ -25,6 +25,7 @@ end, { desc = 'Prints the time' })
 vim.keymap.set('n', '<leader>tn', ':term<CR>', { desc = '[N]ew terminal' })
 vim.keymap.set('n', '<leader>tv', ':vsplit | terminal<CR>', { desc = '[V]ertical split terminal' })
 vim.keymap.set('n', '<leader>th', ':split | terminal<CR>', { desc = '[H]orizontal split terminal' })
+vim.keymap.set('n', '<leader>l', ':RunTest<CR>', { desc = '[L]aunch test at current line' })
 
 vim.keymap.set('n', '<leader>ut', function()
   require('treesitter-context').toggle()
