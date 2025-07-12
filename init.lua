@@ -4,6 +4,7 @@ require 'config.autocommands.on_yank'
 require 'config.commands.cp'
 require 'config.commands.remote'
 require 'config.commands.run_test'
+require 'config.commands.toggle_diagnostics'
 
 vim.o.title = true
 vim.o.titlestring = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
