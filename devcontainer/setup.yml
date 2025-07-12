@@ -1,0 +1,80 @@
+# volumes:
+#   - ~/.zshrc:/root/.zshrc:ro
+#   - ~/.config:/root/.config
+#   - ~/.ssh/:/root/.ssh/:ro
+#   - ~/.oh-my-zsh/custom/themes/:/root/.oh-my-zsh-themes:ro
+---
+- name: Setup development tools
+  hosts: localhost
+  connection: local
+  become: yes
+  tasks:
+    - name: Update package cache
+      apk:
+        update_cache: yes
+      retries: 3
+      delay: 2
+      ignore_errors: yes
+
+    - name: Install required system packages
+      apk:
+        name:
+          - curl
+          - unzip
+          - bash
+          - ripgrep
+          - zoxide
+          - fzf
+        state: present
+
+    - name: Maybe remove existing oh-my-zsh installation
+      ansible.builtin.file:
+        path: /root/.oh-my-zsh
+        state: absent
+
+    - name: Download ohmyzsh
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+        dest: "/root/install.sh"
+        mode: '0755'
+      retries: 3
+      delay: 2
+
+    - name: Install ohmyzsh
+      ansible.builtin.script:
+        cmd: "/root/install.sh --unattended --keep-zshrc"
+
+    - name: Copy mounted ohmyzsh themes
+      ansible.builtin.copy:
+        src: "/root/.oh-my-zsh-themes/"
+        dest: "/root/.oh-my-zsh/custom/themes/"
+        remote_src: yes
+
+    - name: Install zsh-autosuggestions plugin
+      ansible.builtin.git:
+        repo: https://github.com/zsh-users/zsh-autosuggestions
+        dest: ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+        depth: 1
+
+    - name: Install zsh-completions plugin
+      ansible.builtin.git:
+        repo: https://github.com/zsh-users/zsh-completions
+        dest: ~/.oh-my-zsh/custom/plugins/zsh-completions
+        depth: 1
+
+    - name: Install zsh-syntax-highlighting plugin
+      ansible.builtin.git:
+        repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
+        dest: ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+        depth: 1
+
+    - name: Change user shell to zsh
+      become: true
+      ansible.builtin.user:
+        name: "{{ ansible_user_id }}"
+        shell: /bin/zsh
+
+    - name: Install neovim
+      apk:
+        name: neovim
+        state: present
