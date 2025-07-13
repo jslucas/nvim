@@ -98,6 +98,7 @@ return { -- Autocompletion
         { name = 'nvim_lsp', keyword_length = 1 },
         { name = 'luasnip' },
         { name = 'path' },
+        { name = 'render-markdown' },
       },
     }
   end,
