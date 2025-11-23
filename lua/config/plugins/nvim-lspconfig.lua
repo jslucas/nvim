@@ -120,6 +120,28 @@ return { -- LSP Configuration & Plugins
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
+    -- Determine solargraph command dynamically
+    local function get_solargraph_cmd()
+      -- Check if Gemfile exists and contains solargraph
+      local gemfile_path = vim.fn.findfile('Gemfile', '.;')
+      if gemfile_path ~= '' then
+        local gemfile_content = vim.fn.readfile(gemfile_path)
+        for _, line in ipairs(gemfile_content) do
+          if line:match('solargraph') then
+            return { 'bundle', 'exec', 'solargraph', 'stdio' }
+          end
+        end
+      end
+
+      -- Check if solargraph is available in PATH
+      if vim.fn.executable('solargraph') == 1 then
+        return { 'solargraph', 'stdio' }
+      end
+
+      -- Return nil if not available
+      return nil
+    end
+
     -- Enable the following language servers
     --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
     --
@@ -135,21 +157,6 @@ return { -- LSP Configuration & Plugins
         cmd = { 'elixir-ls' },
       },
       eslint = {},
-      solargraph = {
-        -- https://medium.com/@cristianvg/neovim-lsp-your-rbenv-gemset-and-solargraph-8896cb3df453
-        cmd = { 'bundle', 'exec', 'solargraph', 'stdio' },
-        settings = {
-          solargraph = {
-            autoformat = true,
-            completion = true,
-            diagnostics = true,
-            folding = true,
-            references = true,
-            rename = true,
-            symbols = true,
-          },
-        },
-      },
       terraformls = {},
       lua_ls = {
         settings = {
@@ -165,6 +172,25 @@ return { -- LSP Configuration & Plugins
       marksman = {},
       vuels = {},
     }
+
+    -- Add solargraph if available
+    local solargraph_cmd = get_solargraph_cmd()
+    if solargraph_cmd then
+      servers.solargraph = {
+        cmd = solargraph_cmd,
+        settings = {
+          solargraph = {
+            autoformat = true,
+            completion = true,
+            diagnostics = true,
+            folding = true,
+            references = true,
+            rename = true,
+            symbols = true,
+          },
+        },
+      }
+    end
 
     -- Ensure the servers and tools above are installed
     --  To check the current status of installed tools and/or manually install
