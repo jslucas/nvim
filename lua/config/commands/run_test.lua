@@ -26,7 +26,7 @@ local test_command_dispatch = {
 local function send_command_to_terminal(cmd)
   local found_terminal = false
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.api.nvim_buf_is_loaded(buf) and vim.api.nvim_buf_get_option(buf, 'buftype') == 'terminal' then
+    if vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].buftype == 'terminal' then
       local chans = vim.api.nvim_list_chans()
       for _, chan in ipairs(chans) do
         if chan.buffer == buf and chan.mode == 'terminal' then

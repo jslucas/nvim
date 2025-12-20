@@ -1,6 +1,6 @@
 local function toggle_diagnostics()
   if vim.diagnostic.is_enabled() then
-    vim.diagnostic.disable(false)
+    vim.diagnostic.enable(false)
   else
     vim.diagnostic.enable()
   end
