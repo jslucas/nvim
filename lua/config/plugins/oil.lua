@@ -3,7 +3,7 @@ return {
   lazy = false,
   priority = 1000,
   keys = {
-    { '<leader>e', '<cmd>Oil --float<CR>', desc = 'Explorer' },
+    -- { '<leader>e', '<cmd>Oil --float<CR>', desc = 'Explorer' },
     { '<leader>b', '<cmd>Oil<CR>', desc = 'Explorer' },
   },
   opts = {
