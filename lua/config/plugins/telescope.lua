@@ -47,6 +47,23 @@ return {
     -- See `:help telescope` and `:help telescope.setup()`
     local lga_actions = require 'telescope-live-grep-args.actions'
 
+    -- Custom buffer delete with confirmation for dirty buffers
+    local function delete_buffer_with_confirm(bufnr)
+      local action_state = require 'telescope.actions.state'
+      local current_picker = action_state.get_current_picker(bufnr)
+      current_picker:delete_selection(function(selection)
+        local buf = selection.bufnr
+        if vim.bo[buf].modified then
+          local choice = vim.fn.confirm('Buffer has unsaved changes. Delete anyway?', '&Yes\n&No', 2)
+          if choice == 1 then
+            vim.api.nvim_buf_delete(buf, { force = true })
+          end
+        else
+          vim.api.nvim_buf_delete(buf, { force = false })
+        end
+      end)
+    end
+
     require('telescope').setup {
       -- You can put your default mappings / updates / etc. in here
       --  All the info you're looking for is in `:help telescope.setup()`
@@ -54,10 +71,10 @@ return {
       defaults = {
         mappings = {
           n = { -- normal mode
-            ['<c-d>'] = require('telescope.actions').delete_buffer,
+            ['<c-d>'] = delete_buffer_with_confirm,
           },
           i = { -- insert mode
-            ['<c-d>'] = require('telescope.actions').delete_buffer,
+            ['<c-d>'] = delete_buffer_with_confirm,
           },
         },
       },
@@ -101,6 +118,7 @@ return {
     vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
     vim.keymap.set('n', '<leader>st', builtin.tags, { desc = '[S]earch [T]ags' })
     vim.keymap.set('n', '<leader>sm', builtin.marks, { desc = '[S]earch [M]arks' })
+    vim.keymap.set('n', '<leader>se', builtin.registers, { desc = '[S]earch r[E]gisters' })
     vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
     -- Slightly advanced example of overriding default behavior and theme
