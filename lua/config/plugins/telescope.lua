@@ -47,21 +47,25 @@ return {
     -- See `:help telescope` and `:help telescope.setup()`
     local lga_actions = require 'telescope-live-grep-args.actions'
 
-    -- Custom buffer delete with confirmation for dirty buffers
-    local function delete_buffer_with_confirm(bufnr)
+    local function delete_buffer_with_confirm(prompt_bufnr)
       local action_state = require 'telescope.actions.state'
-      local current_picker = action_state.get_current_picker(bufnr)
-      current_picker:delete_selection(function(selection)
-        local buf = selection.bufnr
-        if vim.bo[buf].modified then
-          local choice = vim.fn.confirm('Buffer has unsaved changes. Delete anyway?', '&Yes\n&No', 2)
-          if choice == 1 then
-            vim.api.nvim_buf_delete(buf, { force = true })
-          end
-        else
-          vim.api.nvim_buf_delete(buf, { force = false })
+      local current_picker = action_state.get_current_picker(prompt_bufnr)
+      local selection = action_state.get_selected_entry()
+      if not selection then
+        return
+      end
+      local buf = selection.bufnr
+      local needs_force = vim.bo[buf].modified or vim.bo[buf].buftype == 'terminal'
+      if needs_force then
+        local msg = vim.bo[buf].modified and 'Buffer has unsaved changes. Delete anyway?'
+          or 'Terminal buffer will be killed. Delete anyway?'
+        local choice = vim.fn.confirm(msg, '&Yes\n&No', 2)
+        if choice ~= 1 then
+          return
         end
-      end)
+      end
+      vim.api.nvim_buf_delete(buf, { force = needs_force })
+      current_picker:delete_selection(function() end)
     end
 
     require('telescope').setup {
