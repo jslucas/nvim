@@ -1,5 +1,6 @@
 -- Returns GitHub URL for the current file
-local function build_github_url(args)
+local function build_github_url(args, opts)
+  opts = opts or {}
   local is_git_repo = vim.fn.system('git rev-parse --is-inside-work-tree'):gsub('%s+', '') == 'true'
   if not is_git_repo then
     print 'Not a git repository'
@@ -12,12 +13,17 @@ local function build_github_url(args)
     :gsub('git@github.com:', 'https://github.com/')
     :gsub('%.git$', '')
 
-  local branch = vim.fn.system('git rev-parse --abbrev-ref HEAD'):gsub('%s+', '')
+  local ref
+  if opts.main_permalink then
+    ref = vim.fn.system('git rev-parse origin/main'):gsub('%s+', '')
+  else
+    ref = vim.fn.system('git rev-parse --abbrev-ref HEAD'):gsub('%s+', '')
+  end
   local relative_file_path = vim.fn.expand '%:.'
   local url_parts = {
     git_remote,
     "blob",
-    branch,
+    ref,
     relative_file_path
   }
 
@@ -50,5 +56,14 @@ local function copy_remote(args)
   print('Copied remote URL: ' .. github_url)
 end
 
+-- Copies the current file's GitHub permalink (using main's SHA) to the clipboard
+local function copy_remote_main(args)
+  local github_url = build_github_url(args, { main_permalink = true })
+  if not github_url then return end
+  vim.fn.setreg('+', github_url)
+  print('Copied main permalink: ' .. github_url)
+end
+
 vim.api.nvim_create_user_command('OpenRemote', open_remote, { range = true })
 vim.api.nvim_create_user_command('CopyRemote', copy_remote, { range = true })
+vim.api.nvim_create_user_command('CopyRemoteMain', copy_remote_main, { range = true })
