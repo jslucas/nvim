@@ -99,7 +99,7 @@ return { -- LSP Configuration & Plugins
         --
         -- When you move your cursor, the highlights will be cleared (the second autocommand).
         local client = vim.lsp.get_client_by_id(event.data.client_id)
-        if client and client:supports_method('textDocument/documentHighlight') then
+        if client and client:supports_method 'textDocument/documentHighlight' then
           vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
             buffer = event.buf,
             callback = vim.lsp.buf.document_highlight,
@@ -122,19 +122,24 @@ return { -- LSP Configuration & Plugins
 
     -- Determine solargraph command dynamically
     local function get_solargraph_cmd()
+      -- Prefer project-local binstub
+      if vim.fn.executable './bin/solargraph' == 1 then
+        return { './bin/solargraph', 'stdio' }
+      end
+
       -- Check if Gemfile exists and contains solargraph
       local gemfile_path = vim.fn.findfile('Gemfile', '.;')
       if gemfile_path ~= '' then
         local gemfile_content = vim.fn.readfile(gemfile_path)
         for _, line in ipairs(gemfile_content) do
-          if line:match('solargraph') then
+          if line:match 'solargraph' then
             return { 'bundle', 'exec', 'solargraph', 'stdio' }
           end
         end
       end
 
       -- Check if solargraph is available in PATH
-      if vim.fn.executable('solargraph') == 1 then
+      if vim.fn.executable 'solargraph' == 1 then
         return { 'solargraph', 'stdio' }
       end
 
