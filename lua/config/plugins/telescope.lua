@@ -113,6 +113,12 @@ return {
         find_command = { 'rg', '--files', '--hidden', '-g', '!.git' },
       }
     end, { desc = '[S]earch [F]iles' })
+    vim.keymap.set('n', '<leader>sF', function()
+      builtin.find_files {
+        find_command = { 'rg', '--files', '--hidden', '--no-ignore', '-g', '!.git' },
+        prompt_title = 'Find Files (no ignore)',
+      }
+    end, { desc = '[S]earch [F]iles (no gitignore)' })
     vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
     vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
     -- vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
