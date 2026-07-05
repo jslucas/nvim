@@ -99,6 +99,19 @@ return {
       },
     }
 
+    -- Compat shim: nvim-treesitter's `main` branch dropped the legacy
+    -- `parsers.ft_to_lang` / `configs` API that Telescope's previewer uses,
+    -- which throws "attempt to call field 'ft_to_lang' (a nil value)" in
+    -- previews. Replace the highlighter with one using the modern core API.
+    local previewer_utils = require 'telescope.previewers.utils'
+    previewer_utils.ts_highlighter = function(bufnr, ft)
+      local lang = vim.treesitter.language.get_lang(ft)
+      if not lang then
+        return false
+      end
+      return pcall(vim.treesitter.start, bufnr, lang)
+    end
+
     -- Enable Telescope extensions if they are installed
     pcall(require('telescope').load_extension, 'fzf')
     pcall(require('telescope').load_extension, 'ui-select')

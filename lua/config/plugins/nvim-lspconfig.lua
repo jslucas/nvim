@@ -173,7 +173,7 @@ return { -- LSP Configuration & Plugins
         },
       },
       marksman = {},
-      vuels = {},
+      vue_ls = {},
     }
 
     -- Add solargraph if available
@@ -212,7 +212,10 @@ return { -- LSP Configuration & Plugins
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-    require('mason-lspconfig').setup()
+    -- Disable automatic enabling so mason-installed *tools* (e.g. stylua, which
+    -- ships an obsolete `--lsp` lspconfig entry) aren't started as LSP servers.
+    -- The real servers are enabled explicitly via vim.lsp.enable() below.
+    require('mason-lspconfig').setup { automatic_enable = false }
 
     -- Configure each LSP server using the new vim.lsp.config() API
     for server_name, server in pairs(servers) do
